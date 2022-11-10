@@ -1,3 +1,3 @@
 main :: IO()
 main = do
-    print "Olá Github"
+    print "Olá Github 2"
