@@ -1,3 +1,4 @@
 main :: IO()
 main = do
-    print "Olá Github 2"
+    entrada <- getLine
+    print ("Olá " ++ entrada)
