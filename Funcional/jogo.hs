@@ -1,0 +1,3 @@
+--import Models.Jogador 
+--calcularDano :: Int -> Int -> Int 
+--calcularDano x y =

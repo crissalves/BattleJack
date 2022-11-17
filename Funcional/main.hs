@@ -1,8 +1,14 @@
 main :: IO()
 main = do
-    putStrLn "Boas vindas ao Battlejack !"
-    menuInicial
-
+    putStrLn "▄▄                                                                                  "
+    putStrLn "▀███▀▀▀██▄          ██     ██    ▀███             ▀████▀              ▀███       ██ "
+    putStrLn "  ██    ██          ██     ██      ██               ██                  ██       ██ "
+    putStrLn "  ██    ██ ▄█▀██▄ ██████ ██████    ██   ▄▄█▀██      ██  ▄█▀██▄  ▄██▀██  ██  ▄██▀ ██ "
+    putStrLn "  ██▀▀▀█▄▄ █   ██   ██     ██      ██  ▄█▀   ██     ██ ██   ██ ██▀  ██  ██ ▄█    ██ "
+    putStrLn "  ██    ▀█ ▄█████   ██     ██      ██  ██▀▀▀▀▀▀     ██  ▄█████ ██       ██▄██    ▀▀ "
+    putStrLn "  ██    ▄█ █   ██   ██     ██      ██  ██▄    ▄█ █  ██ ██   ██ ██▄    ▄ ██ ▀██▄     "
+    putStrLn "▄████████▀ ████▀██▄ ▀████  ▀████ ▄████▄ ▀█████▀█ ████  ▀████▀██▄█████▀▄████▄ ██▄ ██ "  
+    menuInicial 
 
 menuInicial :: IO()
 menuInicial = do
@@ -19,12 +25,12 @@ menuInicial = do
 --Resolver o prelude.read: no parse para não quebrar o programa
 escolha :: Int -> IO()
 escolha opcao 
-            | opcao == 1 = putStrLn "Inicializando..."
+            | opcao == 1 = menuJogador
             | opcao == 2 = regras
             | opcao == 3 = creditos
-            | opcao == 4 = putStrLn "Xau ;) volte logo"
+            | opcao == 4 = putStrLn "Obrigador por jogar :D"
             | otherwise = do
-                putStrLn "Escolhe Certo >:("
+                putStrLn "Escolha uma opção válida"
                 menuInicial
 
 
@@ -62,3 +68,22 @@ creditos = do
     putStrLn "\nPressione Enter para voltar ao menu Inicial"
     x <- getLine
     menuInicial
+
+
+menuJogador :: IO()
+menuJogador = do
+    putStrLn "Inicializando..."
+    putStrLn "\nEscolha qual modo de jogo: \n"
+    putStrLn "1 -> Jogador vs IA"
+    putStrLn "2 -> Jogador vs Jogador"
+    putStrLn "3 -> Jogador vs Jogador + Dealer"
+    putStrLn "\nSelecione a opção desejada: "
+    opcao <- readLn :: IO Int
+    escolhaModo opcao
+
+escolhaModo :: Int -> IO ()
+escolhaModo opcao
+                | opcao == 1 = putStrLn "Contra IA"
+                | opcao == 2 = putStrLn "JxJ"
+                | opcao == 3 = putStrLn "JxJ (dealer)"
+
