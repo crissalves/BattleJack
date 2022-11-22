@@ -85,7 +85,7 @@ menuJogador = do
 
 escolhaModo :: Int -> IO ()
 escolhaModo opcao
-                | opcao == 1 = jogo
+                | opcao == 1 = jogoVSIA 
                 | opcao == 2 = putStrLn "JxJ"
                 | opcao == 3 = putStrLn "JxJ (dealer)"
                 

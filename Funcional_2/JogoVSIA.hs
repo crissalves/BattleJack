@@ -6,8 +6,8 @@ import Models.Baralho
 import System.Random
 --calcularDano :: Int -> Int -> Int 
 --calcularDano x y =
-jogo :: IO()
-jogo = do
+jogoVSIA :: IO()
+jogoVSIA = do
     putStrLn "\nAntes de começar o jogo"
     putStrLn "Digite o seu nome como Jogador:"
 
