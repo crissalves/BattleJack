@@ -39,8 +39,8 @@ escolha opcao
 regras :: IO()
 regras = do
     putStrLn "\nRegras: \n"
-    putStrLn "Existem dois modos, o modo dealer e o modo JxJ (jogador vs jogador)"
-    putStrLn "Inicialmente os jogadores teram 200 de vida, e o jogo acabará quando algum dos jogadores chegar a 0."
+    putStrLn "Existem dois modos, o modo JxIA(Jogador vs IA) e o modo JxJ (jogador vs jogador)"
+    putStrLn "Inicialmente os jogadores teram 100 de vida, e o jogo acabará quando algum dos jogadores chegar a 0."
     putStrLn "Cada jogador terá duas opções quando chegar sua vez: \n"
     putStrLn "Pedir Carta: Onde o jogador irá receber uma carta aleatória que pode possuir o valor de 1 a 11"
     putStrLn "Parar: É quando o jogador decide parar de puxar e aguarda o oponente parar também para contabilizar os danos."
@@ -62,9 +62,9 @@ regras = do
 creditos :: IO()
 creditos = do
     putStrLn "\nEquipe : \n"
-    putStrLn "Cristian Alves da Silva. 119211092"
+    putStrLn "Cristian Alves da Silva. (crissalves)"
     putStrLn "José Erik"
-    putStrLn "Lucas Oliveira"
+    putStrLn "Lucas Oliveira Carvaho. (Tampasco)"
     putStrLn "\nProjeto realizado para disciplina de Paradigmas de Linguagem da Computação, do Curso Ciências da Computação na Universidade Federal de Campina Grande."
     putStrLn "Feito para termos melhor conhecimento da programação funcional utilizando a linguagem de programação haskell."
     putStrLn "\nPressione Enter para voltar ao menu Inicial"
@@ -78,7 +78,6 @@ menuJogador = do
     putStrLn "\nEscolha qual modo de jogo: \n"
     putStrLn "1 -> Jogador vs IA"
     putStrLn "2 -> Jogador vs Jogador"
-    putStrLn "3 -> Jogador vs Jogador + Dealer"
     putStrLn "\nSelecione a opção desejada: "
     opcao <- readLn :: IO Int
     escolhaModo opcao
@@ -86,7 +85,5 @@ menuJogador = do
 escolhaModo :: Int -> IO ()
 escolhaModo opcao
                 | opcao == 1 = jogoVSIA 
-                | opcao == 2 = putStrLn "JxJ"
-                | opcao == 3 = putStrLn "JxJ (dealer)"
+                | opcao == 2 = jogadorXjogador
                 
-
