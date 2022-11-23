@@ -4,6 +4,7 @@ import Models.Jogador
 import Models.Carta
 import Models.Baralho
 import System.Random
+
 --calcularDano :: Int -> Int -> Int 
 --calcularDano x y =
 jogoVSIA :: IO()
@@ -16,8 +17,8 @@ jogoVSIA = do
     putStrLn "Agora... Prepare-se para a BATALHA"
 
 
-    let jogador = Jogador nomePlayer 100 [] False
-    let ia = Jogador "Robo I.A." 100 [] False
+    let jogador = Jogador nomePlayer 1 [] False
+    let ia = Jogador "Robo I.A." 1 [] False
     prepararRodada jogador ia
 
 prepararRodada :: Jogador -> Jogador -> IO()
@@ -32,9 +33,9 @@ iniciarJogo baralho jogador ia = do
     putStrLn "Os dois puxam uma carta para suas mãos"
     putStrLn ("O jogo mental acaba de começar.")
 
-    num1 <- randomRIO(0,13::Int)
+    num1 <- randomRIO(0,12::Int)
     naipe1 <- randomRIO(0,3::Int)
-    num2 <- randomRIO(0,13::Int)
+    num2 <- randomRIO(0,12::Int)
     naipe2 <- randomRIO(0,3::Int)
 
     let carta1 = puxarCarta num1 naipe1 baralho
@@ -46,10 +47,11 @@ iniciarJogo baralho jogador ia = do
     putStrLn ("\nAs cartas de " ++ (nome ia) ++ ":")
     putStrLn (mostrarMao(mao(iaAtt)))
 
-    batalha baralho jogadorAtt iaAtt
+    
+    batalhaVSIA baralho jogadorAtt iaAtt
 
-batalha :: Baralho -> Jogador -> Jogador -> IO()
-batalha baralho jogador ia = do
+batalhaVSIA :: Baralho -> Jogador -> Jogador -> IO()
+batalhaVSIA baralho jogador ia = do
     if(parou(jogador) && parou(ia)) then aplicarDano jogador ia baralho
     else if(parou(jogador)) then turnoIA baralho jogador ia  
     else do 
@@ -60,7 +62,7 @@ batalha baralho jogador ia = do
     
         opcao <- getLine
         if(opcao == "1") then do
-         num <- randomRIO(0,13::Int)
+         num <- randomRIO(0,12::Int)
          naipe <- randomRIO(0,3::Int)
          let carta = puxarCarta num naipe baralho
          let jogadorAtt = adicionarCarta jogador carta
@@ -72,13 +74,13 @@ batalha baralho jogador ia = do
             putStrLn "BOOM"
             putStrLn "Acabou estourando X("
             let jogadorAtt2 = decidirParar jogadorAtt
-            batalha baralho jogadorAtt2 ia
-         else if(parou(ia)) then batalha baralho jogadorAtt ia
+            batalhaVSIA baralho jogadorAtt2 ia
+         else if(parou(ia)) then batalhaVSIA baralho jogadorAtt ia
          else turnoIA baralho jogadorAtt ia
 
         else do
             let jogadorAtt = decidirParar jogador
-            batalha baralho jogadorAtt ia
+            batalhaVSIA baralho jogadorAtt ia
 
 
 turnoIA :: Baralho -> Jogador -> Jogador -> IO()
@@ -87,15 +89,16 @@ turnoIA baralho jogador ia = do
       if(estourouMao(ia) || danoTotal(mao(ia)) > 16) then do
         putStrLn "O adversário decidiu parar"
         let iaAtt = decidirParar ia
-        batalha baralho jogador iaAtt
+        batalhaVSIA baralho jogador iaAtt
       else do 
         putStrLn "Ao puxar a carta do baralho, ele adiciona a sua mão"
-        num <- randomRIO(0,13::Int)
+        num <- randomRIO(0,12::Int)
         naipe <- randomRIO(0,3::Int)
         let carta = puxarCarta num naipe baralho
         let iaAtt = adicionarCarta ia carta
-        batalha baralho jogador iaAtt
+        batalhaVSIA baralho jogador iaAtt
 
+   
 aplicarDano :: Jogador -> Jogador -> Baralho -> IO()
 aplicarDano jogador ia baralho = do
     putStrLn "\nOs dois jogadores decidiram parar e revelar suas cartas para o outro"
@@ -126,15 +129,15 @@ aplicarDano jogador ia baralho = do
     putStrLn ("A vida atual de " ++ nome(jogador) ++ " é " ++ show(vida(jogadorAtt)))
     putStrLn ("A vida atual de " ++ nome(ia) ++ " é " ++ show(vida(iaAtt)))
 
-    if(zerouVida(jogador) || zerouVida(ia)) then resultado jogadorAtt iaAtt
+    let jogadorAtt2 = reiniciarJogador jogadorAtt    
+    let iaAtt2 = reiniciarJogador iaAtt
+    if(zerouVida(jogadorAtt) && zerouVida(iaAtt)) then desempate jogadorAtt2 iaAtt2 baralho
+    else if(zerouVida(jogadorAtt) || zerouVida(iaAtt)) then resultado jogadorAtt iaAtt
     else do
         putStrLn "Depois da tensão da batalha, os dois jogadores voltam para a mesa sem cartas na mão"
         putStrLn "Aperte Enter para ir para próxima rodada"
         y <- getLine
-        let jogadorAtt2 = reiniciarJogador jogadorAtt
-        let iaAtt2 = reiniciarJogador iaAtt
-        if(zerouVida(jogador) && zerouVida(ia)) then desempate jogadorAtt2 iaAtt2 baralho
-        else prepararRodada jogadorAtt2 iaAtt2
+        prepararRodada jogadorAtt2 iaAtt2
 
 resultado :: Jogador -> Jogador -> IO()
 resultado jogador ia = do
@@ -158,7 +161,7 @@ desempate jogador ia baralho = do
 rodadaDesempate :: Jogador -> Jogador -> Baralho -> Bool -> IO()
 rodadaDesempate jogador ia baralho vezJogador = do
     if(vezJogador) then do
-        num <- randomRIO(0,13::Int)
+        num <- randomRIO(0,12::Int)
         naipe <- randomRIO(0,3::Int)
         let carta = puxarCarta num naipe baralho
         let jogadorAtt = adicionarCarta jogador carta
@@ -169,9 +172,9 @@ rodadaDesempate jogador ia baralho vezJogador = do
         if(estourouMao(jogadorAtt)) then do
          putStrLn "Infelizmente você perdei :("
 
-        else rodadaDesempate jogadorAtt ia baralho True
+        else rodadaDesempate jogadorAtt ia baralho False
     else do
-        num <- randomRIO(0,13::Int)
+        num <- randomRIO(0,12::Int)
         naipe <- randomRIO(0,3::Int)
         let carta = puxarCarta num naipe baralho
         let iaAtt = adicionarCarta ia carta
@@ -181,7 +184,7 @@ rodadaDesempate jogador ia baralho vezJogador = do
         putStrLn (mostrarMao(mao(iaAtt)))
         if(estourouMao(iaAtt)) then do
          putStrLn "Parabéns você ganhou"
-        else rodadaDesempate jogador iaAtt baralho False
+        else rodadaDesempate jogador iaAtt baralho True
 
    
 puxarCarta :: Int-> Int -> Baralho -> Carta
