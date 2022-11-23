@@ -14,3 +14,5 @@ Para funcionar corretamente, se faz necessário a instalação do:
 ```
 cabal install --lib random.
 ```
+
+Obs: Por algum motivo, não conseguimos rodar no VScode, então recomendamos usar o Terminal.
