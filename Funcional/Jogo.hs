@@ -71,7 +71,7 @@ batalhaVSjogador baralho jogador1 jogador2 = do
     if(parou(jogador1) && parou(jogador2)) then aplicarDano jogador1 jogador2 baralho
     else if(parou(jogador1)) then batalhaVSjogador baralho jogador2 jogador1  
     else do 
-        putStrLn "\nQual decisão irá tomar agora: \n"
+        putStrLn ("\nQual decisão irá tomar agora, " ++ nome(jogador1) ++ ":\n")
         putStrLn "1 -> Pedir carta"
         putStrLn "2 -> Parar"
         putStrLn "Selecione uma dessa opções:"
@@ -91,8 +91,6 @@ batalhaVSjogador baralho jogador1 jogador2 = do
             pulaLinhas --- Função para pular linha :D
 
             if(estourouMao(jogador1Att)) then do
-                putStrLn "BOOM"
-                putStrLn "Acabou estourando X("
                 let jogador1Att2 = decidirParar jogador1Att
                 batalhaVSjogador baralho jogador2 jogador1Att2
             else if(parou(jogador2)) then batalhaVSjogador baralho jogador2 jogador1Att
@@ -100,6 +98,7 @@ batalhaVSjogador baralho jogador1 jogador2 = do
 
         else do
             let jogador1Att = decidirParar jogador1
+            pulaLinhas
             batalhaVSjogador baralho jogador2 jogador1Att
 
 
@@ -184,28 +183,47 @@ aplicarDano jogador1 jogador2 baralho = do
     if(zerouVida(jogador1Att) && zerouVida(jogador2Att)) then desempate jogador1Att2 jogador2Att2 baralho
     else if(zerouVida(jogador1Att) || zerouVida(jogador2Att)) then resultado jogador1Att jogador2Att
     else do
-        putStrLn "Depois da tensão da batalha, os dois jogadores voltam para a mesa sem cartas na mão"
+        putStrLn "\nDepois da tensão da batalha, os dois jogadores voltam para a mesa sem cartas na mão"
         putStrLn "Aperte Enter para ir para próxima rodada"
         y <- getLine
         prepararRodada jogador1Att2 jogador2Att2
 
 resultado :: Jogador -> Jogador -> IO()
 resultado jogador1 jogador2 = do
-    putStrLn "Temos um vencedor..."
+    putStrLn "\nTemos um vencedor..."
     putStrLn "Depois de todas as batalhas travadas com auxilio do poder das cartas"
-    putStrLn "Um triunfante jogador se ergue no campo de batalha: "
+    putStrLn "Um triunfante jogador se ergue no campo de batalha: \n"
     if(zerouVida(jogador1)) then putStrLn (nome(jogador2) ++ " é o GRANDE VENCEDOR")
     else putStrLn (nome(jogador1) ++ " é o GRANDE VENCEDOR")
 
 desempate :: Jogador -> Jogador -> Baralho -> IO()
 desempate jogador1 jogador2 baralho = do
-    putStrLn "Os dois jogadores empataram e agora vai rolar o desafio FINAL!"
+    putStrLn "\nOs dois jogadores empataram e agora vai rolar o desafio FINAL!"
     putStrLn "O desempate irá acontecer da seguinte forma.."
-    putStrLn "Cada jogador irá pegar uma carta por vez até algum dos dois estourar primeiro"
-    putStrLn "Aperte Enter se entendeu."
-    x <- getLine
+    putStrLn "Cada jogador irá pegar uma carta por vez até algum dos dois estourar primeiro\n"
 
-    rodadaDesempate jogador1 jogador2 baralho True
+    putStrLn "Escolha entre cara ou coroa para decidir quem vai puxar primeiro:\n"
+    putStrLn "1 <- Cara"
+    putStrLn "2 <- Coroa"
+    putStrLn("Selecione uma das opções acima, " ++ nome(jogador1) ++ ":")
+
+    x <- getLine
+    y <- randomRIO(0,1::Int)
+    let num = read x::Int
+    let acertou = caraOuCoroa y num
+
+    putStrLn"\nJogando a moeda pra cima..."
+    if(y == 0) then
+      putStrLn "Deu Cara"
+    else
+      putStrLn "Deu Coroa"
+    
+    if(acertou == True) then do
+      putStrLn("\nO jogador " ++ nome(jogador2) ++ " vai começar puxando\n")
+      rodadaDesempate jogador1 jogador2 baralho False
+    else do
+      putStrLn("\nO jogador " ++ nome(jogador1) ++ " vai começar puxando\n")
+      rodadaDesempate jogador1 jogador2 baralho True
 
    
 rodadaDesempate :: Jogador -> Jogador -> Baralho -> Bool -> IO()
@@ -216,12 +234,14 @@ rodadaDesempate jogador1 jogador2 baralho vezJogador = do
         let carta = puxarCarta num naipe baralho
         let jogador1Att = adicionarCarta jogador1 carta
 
+        putStrLn("Aperte Enter para puxar a carta de " ++ nome(jogador1))
+        input <- getLine
+
         putStrLn (nome(jogador1) ++ " puxa a carta do baralho")
         putStrLn ("\nAs cartas de " ++ (nome jogador1) ++ ":")
         putStrLn (mostrarMao(mao(jogador1Att)))
         if(estourouMao(jogador1Att)) then do
-         putStrLn "Infelizmente você perdei :("
-
+          putStrLn("Parabéns " ++ nome(jogador2) ++ ", você ganhou") 
         else rodadaDesempate jogador1Att jogador2 baralho False
     else do
         num <- randomRIO(0,12::Int)
@@ -229,11 +249,14 @@ rodadaDesempate jogador1 jogador2 baralho vezJogador = do
         let carta = puxarCarta num naipe baralho
         let jogador2Att = adicionarCarta jogador2 carta
 
+        putStrLn("Aperte Enter para puxar a carta de " ++ nome(jogador2))
+        input <- getLine
+
         putStrLn (nome(jogador2) ++ " puxa a carta do baralho")
         putStrLn ("\nAs cartas de " ++ (nome jogador2) ++ ":")
         putStrLn (mostrarMao(mao(jogador2Att)))
         if(estourouMao(jogador2Att)) then do
-         putStrLn "Parabéns você ganhou"
+          putStrLn("Parabéns " ++ nome(jogador1) ++ ", você ganhou") 
         else rodadaDesempate jogador1 jogador2Att baralho True
 
    
@@ -251,3 +274,9 @@ calculardano dmg adicional
 pulaLinhas ::IO()
 pulaLinhas = do
     putStrLn("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+
+caraOuCoroa :: Int -> Int -> Bool
+caraOuCoroa x y = 
+    if(x == (y-1)) then True
+    else False 
+      

@@ -44,7 +44,7 @@ regras = do
     putStrLn "Cada jogador terá duas opções quando chegar sua vez: \n"
     putStrLn "Pedir Carta: Onde o jogador irá receber uma carta aleatória que pode possuir o valor de 1 a 11"
     putStrLn "Parar: É quando o jogador decide parar de puxar e aguarda o oponente parar também para contabilizar os danos."
-    putStrLn "\nUm caso especial é a carta A ela normalmente valerá 11, porém se o jogador possuir duas cartas de valor 10, ela valerá apenas 1."
+    putStrLn "\nUm caso especial é a carta A ela normalmente valerá 11, porém se o jogador possuir duas cartas que juntas valem mais que 10, ela valerá apenas 1."
     putStrLn "As cartas J Q K valeram 10, e as outras cartas valerão seus respectivos valores."
     putStrLn "\nO dano é contabilizado a vida do adversário considerando a soma dos valores de suas cartas, porém existem algumas condições para deixar o jogo mais interessante."
     putStrLn "As condições de contabilização de danos são essas: \n"
