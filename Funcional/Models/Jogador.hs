@@ -16,7 +16,7 @@ module Models.Jogador where
 
     adicionarCarta::Jogador->Carta->Jogador
     adicionarCarta jogador carta
-            | temAs(mao(jogadorAtt)) && estourouMao(jogadorAtt) = Jogador (nome(jogador)) (vida(jogador)) (diminuiAs(mao(jogadorAtt))) (parou(jogador))
+            | temAs(mao(jogadorAtt)) && estourouMao(jogadorAtt) = Jogador (nome(jogador)) (vida(jogador)) (diminuiAs False (mao(jogadorAtt))) (parou(jogador))
             | otherwise = jogadorAtt
             where jogadorAtt = Jogador (nome(jogador)) (vida(jogador)) ([carta] ++ mao(jogador)) (parou(jogador))
 
@@ -30,10 +30,10 @@ module Models.Jogador where
     temAs (h:t) = if(numero(h) == "As") then True
                   else temAs(t)
 
-    diminuiAs :: [Carta] -> [Carta]
-    diminuiAs [] = []
-    diminuiAs (h:t) = if(valor(h) == 11) then [Carta (numero h) (naipe h) (1)] ++ diminuiAs(t)
-                      else [h] ++ diminuiAs(t)
+    diminuiAs :: Bool -> [Carta] -> [Carta]
+    diminuiAs achou [] = []
+    diminuiAs achou (h:t) = if(valor(h) == 11 && achou == False) then [Carta (numero h) (naipe h) (1)] ++ diminuiAs True (t)
+                      else [h] ++ diminuiAs (achou) (t)
 
     mostrarMao :: [Carta] -> String
     mostrarMao [] = []

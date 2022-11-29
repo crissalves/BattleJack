@@ -15,8 +15,8 @@ jogoVSIA = do
     putStrLn ("\nBem-vindo ao jogo BattleJack, " ++ nomePlayer)
     putStrLn "Agora... Prepare-se para a BATALHA"
 
-    let jogador = Jogador nomePlayer 100 [] False
-    let ia = Jogador "Robo I.A." 100 [] False
+    let jogador = Jogador nomePlayer 00 [] False
+    let ia = Jogador "Robo I.A." 00 [] False
     prepararRodada jogador ia
 
 
@@ -96,11 +96,13 @@ batalhaVSjogador baralho jogador1 jogador2 = do
             else if(parou(jogador2)) then batalhaVSjogador baralho jogador2 jogador1Att
             else batalhaVSjogador baralho jogador2 jogador1Att
 
-        else do
+        else if(opcao == "2") then do
             let jogador1Att = decidirParar jogador1
             pulaLinhas
             batalhaVSjogador baralho jogador2 jogador1Att
-
+        else do
+          putStrLn "Escolha um valor entre as opções abaixo: \n"
+          batalhaVSjogador baralho jogador1 jogador2
 
 batalhaVSIA :: Baralho -> Jogador -> Jogador -> IO()
 batalhaVSIA baralho jogador ia = do
@@ -129,9 +131,12 @@ batalhaVSIA baralho jogador ia = do
                 batalhaVSIA baralho jogadorAtt2 ia
             else if(parou(ia)) then batalhaVSIA baralho jogadorAtt ia
             else turnoIA baralho jogadorAtt ia
-        else do
+        else if(opcao == "2") then do
             let jogadorAtt = decidirParar jogador
             batalhaVSIA baralho jogadorAtt ia
+        else do
+             putStrLn "Escolha um valor entre as opções abaixo: \n"
+             batalhaVSIA baralho jogador ia
 
 
 turnoIA :: Baralho -> Jogador -> Jogador -> IO()
@@ -199,8 +204,8 @@ resultado jogador1 jogador2 = do
 desempate :: Jogador -> Jogador -> Baralho -> IO()
 desempate jogador1 jogador2 baralho = do
     putStrLn "\nOs dois jogadores empataram e agora vai rolar o desafio FINAL!"
-    putStrLn "O desempate irá acontecer da seguinte forma.."
-    putStrLn "Cada jogador irá pegar uma carta por vez até algum dos dois estourar primeiro\n"
+    putStrLn "O desempate irá acontecer da seguinte forma..."
+    putStrLn "Cada jogador irá pegar uma carta por vez até que algum dos dois jogadores estourem primeiro\n"
 
     putStrLn "Escolha entre cara ou coroa para decidir quem vai puxar primeiro:\n"
     putStrLn "1 <- Cara"
@@ -208,22 +213,27 @@ desempate jogador1 jogador2 baralho = do
     putStrLn("Selecione uma das opções acima, " ++ nome(jogador1) ++ ":")
 
     x <- getLine
-    y <- randomRIO(0,1::Int)
-    let num = read x::Int
-    let acertou = caraOuCoroa y num
-
-    putStrLn"\nJogando a moeda pra cima..."
-    if(y == 0) then
-      putStrLn "Deu Cara"
-    else
-      putStrLn "Deu Coroa"
+    if(x /= "1" && x /= "2") then do
+        putStrLn "\nEscolha uma opção existente entre 1 e 2"
+        desempate jogador1 jogador2 baralho
+    else do 
+        putStrLn "\nJogando a moeda pra cima..."
+        y <- randomRIO(0,1::Int)
+        let num = read x::Int
+        let acertou = caraOuCoroa y num
+        if(y == 0) then
+            putStrLn "Deu Cara"
+        else
+            putStrLn "Deu Coroa"
     
-    if(acertou == True) then do
-      putStrLn("\nO jogador " ++ nome(jogador2) ++ " vai começar puxando\n")
-      rodadaDesempate jogador1 jogador2 baralho False
-    else do
-      putStrLn("\nO jogador " ++ nome(jogador1) ++ " vai começar puxando\n")
-      rodadaDesempate jogador1 jogador2 baralho True
+        if(acertou == True) then do
+            putStrLn("\nO jogador " ++ nome(jogador2) ++ " vai começar puxando\n")
+            rodadaDesempate jogador1 jogador2 baralho False
+        else do
+            putStrLn("\nO jogador " ++ nome(jogador1) ++ " vai começar puxando\n")
+            rodadaDesempate jogador1 jogador2 baralho True
+          
+    
 
    
 rodadaDesempate :: Jogador -> Jogador -> Baralho -> Bool -> IO()
