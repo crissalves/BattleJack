@@ -15,8 +15,8 @@ jogoVSIA = do
     putStrLn ("\nBem-vindo ao jogo BattleJack, " ++ nomePlayer)
     putStrLn "Agora... Prepare-se para a BATALHA"
 
-    let jogador = Jogador nomePlayer 00 [] False
-    let ia = Jogador "Robo I.A." 00 [] False
+    let jogador = Jogador nomePlayer 100 [] False
+    let ia = Jogador "Robo I.A." 100 [] False
     prepararRodada jogador ia
 
 
@@ -82,7 +82,7 @@ batalhaVSjogador baralho jogador1 jogador2 = do
             naipe <- randomRIO(0,3::Int)
             let carta = puxarCarta num naipe baralho
             let jogador1Att = adicionarCarta jogador1 carta
-            putStrLn "Ao puxar a carta do baralho, você adiciona a tua mão"
+            putStrLn "\nAo puxar a carta do baralho, você adiciona a tua mão"
             putStrLn ("As cartas de " ++ nome(jogador1) ++ ":")
             putStrLn (mostrarMao(mao(jogador1Att)))
             putStrLn ("Enter para continuar")
