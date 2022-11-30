@@ -4,7 +4,7 @@
 
 ### Integrantes: 
 
-- Cristian ALves da Silva
+- Cristian Alves da Silva
 - Lucas de Oliveira Carvalho
 
 ### Dependecias:
