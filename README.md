@@ -4,7 +4,7 @@
 
 ### Integrantes: 
 
-- Cristian ALves da Silva
+- Cristian Alves da Silva
 - Lucas de Oliveira Carvalho
 
 ### Dependecias:
@@ -14,4 +14,8 @@ Para funcionar corretamente, se faz necessário a instalação do:
 cabal install --lib random.
 ```
 
-Obs: Por algum motivo, não conseguimos rodar no VScode, então recomendamos usar o Terminal.
+Obs: Por algum motivo, não conseguimos rodar no VScode, então recomendamos usar o Terminal. Ou seja, entre na pasta do projeto e execute o main com o seguinte comando:
+
+```
+runhaskell main.hs
+```

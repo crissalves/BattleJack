@@ -82,7 +82,7 @@ batalhaVSjogador baralho jogador1 jogador2 = do
             naipe <- randomRIO(0,3::Int)
             let carta = puxarCarta num naipe baralho
             let jogador1Att = adicionarCarta jogador1 carta
-            putStrLn "Ao puxar a carta do baralho, você adiciona a tua mão"
+            putStrLn "\nAo puxar a carta do baralho, você adiciona a tua mão"
             putStrLn ("As cartas de " ++ nome(jogador1) ++ ":")
             putStrLn (mostrarMao(mao(jogador1Att)))
             putStrLn ("Enter para continuar")
