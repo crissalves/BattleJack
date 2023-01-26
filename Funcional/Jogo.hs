@@ -15,8 +15,8 @@ jogoVSIA = do
     putStrLn ("\nBem-vindo ao jogo BattleJack, " ++ nomePlayer)
     putStrLn "Agora... Prepare-se para a BATALHA"
 
-    let jogador = Jogador nomePlayer 00 [] False
-    let ia = Jogador "Robo I.A." 00 [] False
+    let jogador = Jogador nomePlayer 100 [] False
+    let ia = Jogador "Robo I.A." 100 [] False
     prepararRodada jogador ia
 
 
