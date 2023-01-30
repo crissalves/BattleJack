@@ -8,38 +8,39 @@ jogoVSjogador:-
 	iniciarRodada(X,Y).
 
 iniciarRodada(J1,J2):-
-	jogador(J1,_,M1,_),
-	jogador(J2,_,M2,_),
-
 	baralho(Nums,Naipes),
-	pedirCarta(Nums, Naipes, Carta),
+	pedirCarta(Nums, Naipes, Carta1),
 	pedirCarta(Nums, Naipes, Carta2),
 	pedirCarta(Nums, Naipes, Carta3),
 	pedirCarta(Nums, Naipes, Carta4),
-	adicionarCarta(M1,Carta,R1),
-	adicionarCarta(M2,Carta2,R2),
-	adicionarCarta(R1,Carta3,R3),
-	adicionarCarta(R2,Carta4,R4),
+	atualizaMao(J1,[Carta1]),
+	atualizaMao(J1,[Carta2]),
+	atualizaMao(J2,[Carta3]),
+	atualizaMao(J2,[Carta4]),
 
-	atualizaMao(J1, R3),
-	atualizaMao(J2, R4),
+
+	jogador(J1,_,M1,_),
+	jogador(J2,_,M2,_),
 	write("As cartas de J1 sao:"),
-	nl,mostrarMao(R3),
+	nl,mostrarMao(M1),
 	nl,
 	write("As cartas do J2 sao:"),
-	nl,mostrarMao(R4),
+	nl,mostrarMao(M2),
 	nl,write("Aperte Enter para continuar:"),
 	read_line_to_string(user_input,X),nl,
-	batalhaVSjogador(J1,J2).
+	batalha(J1,J2).
 
-batalhaVSjogador(J1,J2):-
-	write("A fazer...").
+batalha(J1,J2):-
+	format(atom(P), "Qual decisao ira tomar agora, ~w: ", [J1]),
+	write(P),nl,
+	write("1 - Pedir uma carta"),nl,
+	write("2 - Parar"),nl,
+	write("Digite uma das alternativas acima: "),
+	read(Escolha).
+	
 
 
 baralho(["As","2","3","4","5","6","7","8","9","10","Valete","Rainha", "Rei"],["Copas","Paus", "Ouros", "Espadas"]).
-
-adicionarCarta([],Carta,[Carta]).
-adicionarCarta(Mao,Carta,Rmao):- Mao = [H|T],Rmao = [H|[Carta|T]].
 
 mostrarMao([]).
 mostrarMao(Lista):- Lista = [H|T], H = [X,Y], write(X), write(" de "), write(Y),nl, mostrarMao(T).
@@ -47,7 +48,7 @@ mostrarMao(Lista):- Lista = [H|T], H = [X,Y], write(X), write(" de "), write(Y),
 pedirCarta(Nums, Naipes, Carta):- random(0,12,X), nth0(X,Nums,R), random(0,3,Y), nth0(Y,Naipes,R1), Carta = [R,R1].
 
 criaJogador(Nome):- assert(jogador(Nome,100,[],false)).
-atualizaMao(Nome,Cartas):- retract(jogador(Nome,X,_,Y)), assert(jogador(Nome,X,Cartas,Y)).
+atualizaMao(Nome,Carta):- retract(jogador(Nome,X,Mao,Y)), append(Carta,Mao,R),assert(jogador(Nome,X,R,Y)).
 
 :- dynamic jogador/4.
 
