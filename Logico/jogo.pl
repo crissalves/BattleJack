@@ -1,11 +1,13 @@
 jogoVSIA:-
-	write("Jogador digite seu nome: "),
+	nl,nl,write("Antes de começar o jogo..."),
+	nl,write("Jogador digite seu nome: "),
 	read_line_to_string(user_input,X),
-	criaJogador(X),
+	criaJogador(X),nl,
 	criaJogador("IA"),
 	iniciarRodada(X,"IA").
 
 jogoVSjogador:-
+	nl,nl,write("Antes de comecar o jogo..."),
 	write("Jogador 1 digite seu nome: "),
 	read_line_to_string(user_input,X),
 	write("Jogador 2 digite seu nome: "),
@@ -35,17 +37,17 @@ iniciarRodada(J1,J2):-
 	baralho(Nums,Naipes),
 	pedirCarta(Nums, Naipes, Carta1),
 	pedirCarta(Nums, Naipes, Carta2),
-	pedirCarta(Nums, Naipes, Carta3),
-	pedirCarta(Nums, Naipes, Carta4),
+	
 	adicionaCarta(J1,Carta1),
-	adicionaCarta(J1,Carta2),
-	adicionaCarta(J2,Carta3),
-	adicionaCarta(J2,Carta4),
+	adicionaCarta(J2,Carta2),
 
 	jogador(J1,_,M1,_),
 	jogador(J2,_,M2,_),
+	nl,format(atom(Comeco), "~w e ~w se encaram e estão prontos para o duelo", [J1, J2]), write(Comeco),
+	nl,write("Os dois puxam uma carta para suas mãos"),
+	nl,write("O jogo mental acaba de começar."),
 	format(atom(P1), "As cartas de ~w sao:", [J1]),
-	write(P1),
+	nl,nl,write(P1),
 	nl,mostrarMao(M1),
 	nl,
 	format(atom(P2), "As cartas de ~w sao:", [J2]),
