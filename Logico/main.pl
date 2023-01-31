@@ -1,3 +1,4 @@
+:- initialization(main).
 :- include('jogo.pl').
 
 main:-
