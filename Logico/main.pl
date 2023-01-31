@@ -1,21 +1,19 @@
 :- (initialization main).
 :- include('jogo.pl').
 
-
 main:-
-    write( '▄▄                                                                                  '),
-    write( '▀███▀▀▀██▄          ██     ██    ▀███             ▀████▀              ▀███       ██ '),
-    write( '  ██    ██          ██     ██      ██               ██                  ██       ██ '),
-    write( '  ██    ██ ▄█▀██▄ ██████ ██████    ██   ▄▄█▀██      ██  ▄█▀██▄  ▄██▀██  ██  ▄██▀ ██ '),
-    write( '  ██▀▀▀█▄▄ █   ██   ██     ██      ██  ▄█▀   ██     ██ ██   ██ ██▀  ██  ██ ▄█    ██ '),
-    write( '  ██    ▀█ ▄█████   ██     ██      ██  ██▀▀▀▀▀▀     ██  ▄█████ ██       ██▄██    ▀▀ '),
-    write( '  ██    ▄█ █   ██   ██     ██      ██  ██▄    ▄█ █  ██ ██   ██ ██▄    ▄ ██ ▀██▄     '),
-    write( '▄████████▀ ████▀██▄ ▀████  ▀████ ▄████▄ ▀█████▀█ ████  ▀████▀██▄█████▀▄████▄ ██▄ ██ '),
+    writeln( '▄▄                                                                                  '),
+    writeln( '▀███▀▀▀██▄          ██     ██    ▀███             ▀████▀              ▀███       ██ '),
+    writeln( '  ██    ██          ██     ██      ██               ██                  ██       ██ '),
+    writeln( '  ██    ██ ▄█▀██▄ ██████ ██████    ██   ▄▄█▀██      ██  ▄█▀██▄  ▄██▀██  ██  ▄██▀ ██ '),
+    writeln( '  ██▀▀▀█▄▄ █   ██   ██     ██      ██  ▄█▀   ██     ██ ██   ██ ██▀  ██  ██ ▄█    ██ '),
+    writeln( '  ██    ▀█ ▄█████   ██     ██      ██  ██▀▀▀▀▀▀     ██  ▄█████ ██       ██▄██    ▀▀ '),
+    writeln( '  ██    ▄█ █   ██   ██     ██      ██  ██▄    ▄█ █  ██ ██   ██ ██▄    ▄ ██ ▀██▄     '),
+    writeln( '▄████████▀ ████▀██▄ ▀████  ▀████ ▄████▄ ▀█████▀█ ████  ▀████▀██▄█████▀▄████▄ ██▄ ██ '),
     menuInicial.
     
-    
 menuInicial:-
-    write('\nMenu Inicial \n'),
+    write('\nMenu Inicial\n'),
     write('1 -> Iniciar Jogo'),
     write('2 -> Regras'),
     write('3 -> Créditos'),
@@ -23,7 +21,6 @@ menuInicial:-
     write('\nSelecione o número da opção desejada: '),
     read(opcao),
     escolha(opcao).
-
 
 escolha(1):-
     write('Inicializando...'),
@@ -35,13 +32,12 @@ escolha(1):-
     escolhaJogador(opcaoJogador).
 
 escolhaJogador(1):-
-
-
+    jogoVSIA,
+    meunInicial;
 
 escolhaJogador(2):- 
     jogoVSjogador,
     meunInicial.
-
 
 escolha(2):- 
     write('\nRegras: \n'),
