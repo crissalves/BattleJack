@@ -1,4 +1,4 @@
-:- (initialization main).
+:- initialization(main).
 :- include('jogo.pl').
 
 main:-
@@ -13,7 +13,7 @@ main:-
     menuInicial.
     
 menuInicial:-
-    write('\nMenu Inicial\n'),
+    write('\nMenu Inicial \n'),
     write('1 -> Iniciar Jogo'),
     write('2 -> Regras'),
     write('3 -> Créditos'),
@@ -21,6 +21,7 @@ menuInicial:-
     write('\nSelecione o número da opção desejada: '),
     read(opcao),
     escolha(opcao).
+
 
 escolha(1):-
     write('Inicializando...'),
@@ -32,12 +33,13 @@ escolha(1):-
     escolhaJogador(opcaoJogador).
 
 escolhaJogador(1):-
-    jogoVSIA,
-    meunInicial;
+
+
 
 escolhaJogador(2):- 
     jogoVSjogador,
     meunInicial.
+
 
 escolha(2):- 
     write('\nRegras: \n'),
@@ -59,18 +61,18 @@ escolha(2):-
     read(sair),
     menuInicial.
 
-escolha(3):-
-    write('\nEquipe : \n'),
-    write('Cristian Alves da Silva. (crissalves)'),
-    write('José Erik'),
-    write('Lucas Oliveira Carvaho. (Tampasco)'),
-    write('\nProjeto realizado para disciplina de Paradigmas de Linguagem da Computação, do Curso Ciências da Computação na Universidade Federal de Campina Grande.'),
-    write('Feito para termos melhor conhecimento da programação funcional utilizando a linguagem de programação haskell.'),
-    write('\nPressione Enter para voltar ao menu Inicial'),
-    read(sair),
+escolha("3"):-
+    nl,nl,write('Equipe : '),
+    nl,write('Cristian Alves da Silva. (crissalves)'),
+    nl,write('José Erik'),
+    nl,write('Lucas Oliveira Carvaho. (Tampasco)'),
+    nl,write('\nProjeto realizado para disciplina de Paradigmas de Linguagem da Computação, do Curso Ciências da Computação na Universidade Federal de Campina Grande.'),
+    nl,write('Feito para termos melhor conhecimento da programação funcional utilizando a linguagem de programação haskell e Prolog.'),
+    nl,nl,write('\nPressione Enter para voltar ao menu Inicial'),
+    read_line_to_string(user_input,_),
     menuInicial.
 
-escolha(4):- write('Ate a proxima!'), halt.
+escolha("4"):- write('Ate a proxima!'), halt.
 chamadaPrincipal(_):- 
     opcaoInvalida,
     main.
