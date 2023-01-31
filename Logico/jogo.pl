@@ -14,7 +14,13 @@ jogoVSjogador:-
 	criaJogador(Y),
 	iniciarRodada(X,Y).
 
-prepararRodada(J1,J2):- jogador(J1,0,_,_),jogador(J2,0,_,_), desempate(J1,J2).
+prepararRodada(J1,J2):- 
+	jogador(J1,0,_,_),
+	jogador(J2,0,_,_),
+	atualizaMao(J1,[]),
+	atualizaMao(J2, []),
+	desempate(J1,J2).
+
 prepararRodada(J1,J2):- (jogador(J1,0,_,_);jogador(J2,0,_,_)), resultado(J1,J2).
 	
 prepararRodada(J1,J2):-
@@ -47,7 +53,7 @@ iniciarRodada(J1,J2):-
 	nl,mostrarMao(M2),
 	nl,write("Aperte Enter para continuar:"),
 	read_line_to_string(user_input,X),nl,
-	batalha(J1,J2).
+	prepararBatalha(J1,J2).
 
 prepararBatalha(J1,J2):-
 	jogador(J1,_,_,true),
@@ -64,10 +70,11 @@ prepararBatalha(J1,J2):-
 	batalha(J2,J1).
 
 prepararBatalha("IA",J2):- turnoIA(J2).
+prepararBatalha(J1,"IA"):- batalha(J1,"IA").
 prepararBatalha(J1,J2):- pulaLinhas, batalha(J1,J2).
 
 batalha(J1,J2):-
-	format(atom(P), "Qual decisao ira tomar agora, ~w: ", [J1]),
+	nl,nl,format(atom(P), "Qual decisao ira tomar agora, ~w: ", [J1]),
 	write(P),nl,
 	write("1 - Pedir uma carta"),nl,
 	write("2 - Parar"),nl,
@@ -98,7 +105,7 @@ duelo(J1,J2, "1"):-
 	adicionaCarta(J1, Carta),
 	Carta = [N, N1, _],
 	nl,format(atom(P), "Ao puxar a carta do baralho, voce adiciona um ~w de ~w", [N,N1]),
-	write(P), nl, format(atom(T), "As cartas de ~w são: ", [J1]),
+	write(P), nl, format(atom(T), "As cartas de ~w sao: ", [J1]),
 	write(T),nl,
 	jogador(J1,_,M,_),
 	mostrarMao(M),nl,
@@ -116,17 +123,20 @@ aplicarDano(J1,J2):-
 
 	nl,nl,write("Os dois jogadores decidiram parar e revelar suas cartas para o outro."),
 	nl,write("A mesa mostra as cartas de ambos os jogadores viradas para cima."),
-	nl,format(atom(T), "As cartas de ~w são: ", [J1]),write(T),
+	nl,format(atom(T), "As cartas de ~w sao: ", [J1]),write(T),
 	nl,mostrarMao(M1),
-	nl,format(atom(X), "As cartas de ~w são: ", [J2]),write(X),
+	nl,format(atom(X), "As cartas de ~w sao: ", [J2]),write(X),
 	nl,mostrarMao(M2),
-	nl,nl,write("Está no momento do ataque ser aplicado"),
+	nl,nl,write("Esta no momento do ataque ser aplicado"),
 	nl,write("Aperte Enter para continuar: "),
+	read_line_to_string(user_input,_),
 
-	danoTotal(M1,D1),
-	danoTotal(M2,D2),
+	danoTotal(M1,Dn1),
+	danoTotal(M2,Dn2),
+	calcularDano(Dn1,Dn2,D1),
+	calcularDano(Dn2,Dn1,D2),
 	
-	nl,nl,write("As cartas se estremecem na tensão que está no ar"),
+	nl,nl,write("As cartas se estremecem na tensao que esta no ar"),
 	nl,format(atom(Dano1), "~w aplica uma dano total ao inimigo de: ~0f" ,[J1,D1]) ,write(Dano1),
 	nl,format(atom(Dano2), "~w aplica uma dano total ao inimigo de: ~0f" ,[J2,D2]) ,write(Dano2),
 	nl,write("Aperte Enter para aplicar os danos: "),
@@ -137,7 +147,7 @@ aplicarDano(J1,J2):-
 	jogador(J1,V1,_,_),
 	jogador(J2,V2,_,_),
 
-	nl,write("Após os ataques cessarem vamos ver o que resta dos jogadores..."),
+	nl,write("Apos os ataques cessarem vamos ver o que resta dos jogadores..."),
 	nl,format(atom(Vida1), "A vida atual de ~w e: ~w", [J1,V1]),write(Vida1),
 	nl,format(atom(Vida2), "A vida atual de ~w e: ~w", [J2,V2]),write(Vida2),
 
@@ -149,7 +159,7 @@ aplicarDano(J1,J2):-
 resultado(J1,J2):-
 	nl,write("Temos um vencedor..."),
 	nl,write("Depois de todas as batalhas travadas com auxilio do poder das cartas"),
-	nl,write("Um triunfante jogador se ergue no campo de batalha: "),
+	nl,write("Um triunfante jogador se ergue no campo de batalha: "),nl,nl,
 	jogador(J1,V1,_,_),
 	jogador(J2,V2,_,_),
 	vencedor(J1,J2,V1,V2).
@@ -157,16 +167,64 @@ resultado(J1,J2):-
 vencedor(J1,J2,0,V2):- write(J2), write(" e o GRANDE VENCEDOR").
 vencedor(J1,J2,V1,0):- write(J1), write(" e o GRANDE VENCEDOR").
 
-desempate:- write("A fazer...").
+desempate(J1,J2):-
+	nl,nl,write("Os dois jogadores empataram e agora vai rolar o desafio FINAL!"),
+	nl,write("O desempate ira acontecer da seguinte forma..."),
+	nl,write("Cada jogador irá pegar uma carta por vez ate que algum dos dois jogadores estourem primeiro"),
+	nl,nl,write("Escolha entre cara ou coroa para decidir quem vai puxar primeiro:"),
+	nl,write("1 <- Cara"),
+	nl,write("2 <- Coroa"),
+	nl,nl,write("Selecione uma das alternativas acima, Jogador: "),
+	read_line_to_string(user_input,X),
+
+	nl,nl,write("Jogando a moeda pra cima..."),
+	random(1,3,Y),
+	atom_number(X,R),
+	jogarMoeda(Y),
+	prepararDesempate(J1,J2,R,Y).
+
+jogarMoeda(1):- nl,write("Deu cara!").
+jogarMoeda(2):- nl,write("Deu coroa!").
+
+prepararDesempate(J1,J2,X,X):-
+	nl,nl,write("Você acertou, com isso, outro jogador irá começar jogando"),
+	rodadaDesempate(J2,J1).
+
+prepararDesempate(J1,J2,_,_):-
+	nl,nl,write("Você errou, com isso, você irá começar jogando"),
+	rodadaDesempate(J1,J2).
+
+rodadaDesempate(J1,J2):-
+	baralho(Nums,Naipes),
+	nl,nl,format(atom(P1), "Aperte Enter para puxar a carta, ~w: ", [J1]),write(P1),
+	read_line_to_string(user_input,_),
+	pedirCarta(Nums,Naipes, Carta),
+	adicionaCarta(J1,Carta),
+	jogador(J1,_,M,_),
+	nl,format(atom(P2), "~w puxou uma carta, colocando-o na mao",[J1]),write(P2),
+	nl,nl,format(atom(P3), "As cartas de ~w sao:", [J1]),write(P3),
+	nl,mostrarMao(M),
+	verificacaoFinal(J1,J2).
+
+verificacaoFinal(J1,J2):-
+	jogador(J1,_,M,_),
+	estorouMao(M,true),
+	nl,nl,format(atom(D), "O jogador ~w, acabou estourando, então quer dizer que...", [J1]),write(D),
+	nl,nl,format(atom(T), "Parabens ~w, voce GANHOU!" ,[J2]),write(T).
+
+verificacaoFinal(J1,J2):- rodadaDesempate(J2,J1).
+
 
 pulaLinhas:- nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl.
 
 baralho(["As","2","3","4","5","6","7","8","9","10","Valete","Rainha", "Rei"],["Copas","Paus", "Ouros", "Espadas"]).
 
 mostrarMao([]).
-mostrarMao(Lista):- Lista = [H|T], H = [X,Y,_], write(X), write(" de "), write(Y),nl, mostrarMao(T).
+mostrarMao(Lista):- Lista = [H|T], H = [X,Y,_],write("- "), write(X), write(" de "), write(Y),nl, mostrarMao(T).
 
-pedirCarta(Nums, Naipes, Carta):- random(0,12,X), nth0(X,Nums,R), random(0,3,Y), nth0(Y,Naipes,R1), danoInicial([R,R1], Valor), Carta = [R,R1,Valor].
+pedirCarta(Nums, Naipes, Carta):- random(0,13,X), nth0(X,Nums,R), random(0,4,Y), nth0(Y,Naipes,R1), danoInicial([R,R1], Valor), Carta = [R,R1,Valor].
+
+adicionaCarta(Nome, Carta):- jogador(Nome,_,Mao,_), append([Carta],Mao,R), atualizaMao(Nome, R), verificacao(Nome).
 
 danoInicial(["As"|_], 11).
 danoInicial(["10"|_], 10).
@@ -178,25 +236,23 @@ danoInicial([H|_], R):- atom_number(H,X), R = X.
 danoTotal([],0).
 danoTotal(Mao, Dano):- Mao = [H|T], H = [_,_,Valor], danoTotal(T,Dano1), Dano is Dano1 + Valor.
 
-calcularDano(Dano,_,DanoR):- Dano > 21, DanoR = 0.
-calcularDano(Dano, true, DanoR):- Dano = 21, DanoR = 41.
-calcularDano(Dano, true, DanoR):- DanoR is Dano + 10.
-calcularDano(Dano, false, DanoR):- Dano = 21, DanoR = 31.
-calcularDano(Dano, false, DanoR):- DanoR = Dano.
-
-adicionaCarta(Nome, Carta):- jogador(Nome,_,Mao,_), append([Carta],Mao,R), atualizaMao(Nome, R), verificacao(Nome).
+calcularDano(Dano,_,0):- Dano > 21.
+calcularDano(21, Ad, 41):- Ad > 21.
+calcularDano(Dano, Ad, DanoR):- Ad > 21, DanoR is Dano + 10.
+calcularDano(21,_,31).
+calcularDano(Dano,_, DanoR):- DanoR = Dano.
 
 verificacao(Nome):- jogador(Nome,_,M,_), estorouMao(M, true), temAs(M,true), diminuiAs(false, M, R), atualizaMao(Nome, R).
 verificacao(Nome):- jogador(Nome,_,M,_), estorouMao(M, true), decidiuParar(Nome).
 verificacao(_).
 
 temAs([], false).
-temAs([H|T], R):- H = [_,_,V], V = 11, R = true.
+temAs([H|T], true):- H = [N,_,_], N = "As".
 temAs([H|T], R):- temAs(T,R).
 
 diminuiAs(_,[],[]).
 diminuiAs(false,[H|T], Rmao):- H = [N,M,11], diminuiAs(true,T,Rmao1), C = [N,M,1], Rmao = [C|Rmao1].
-diminuiAs(achou,[H|T], Rmao):- diminuiAs(achou,T,Rmao1), Rmao = [H|Rmao1].
+diminuiAs(Achou,[H|T], Rmao):- diminuiAs(Achou,T,Rmao1), Rmao = [H|Rmao1].
 
 estorouMao(Mao, R):- danoTotal(Mao,Dano), Dano > 21, R = true.
 estourouMao(_, false).
