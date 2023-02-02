@@ -166,8 +166,8 @@ resultado(J1,J2):-
 	jogador(J2,V2,_,_),
 	vencedor(J1,J2,V1,V2).
 
-vencedor(J1,J2,0,V2):- write(J2), write(" e o GRANDE VENCEDOR").
-vencedor(J1,J2,V1,0):- write(J1), write(" e o GRANDE VENCEDOR").
+vencedor(_,J2,0,_):- write(J2), write(" e o GRANDE VENCEDOR").
+vencedor(J1,_,_,0):- write(J1), write(" e o GRANDE VENCEDOR").
 
 desempate(J1,J2):-
 	nl,nl,write("Os dois jogadores empataram e agora vai rolar o desafio FINAL!"),
@@ -249,8 +249,8 @@ verificacao(Nome):- jogador(Nome,_,M,_), estorouMao(M, true), decidiuParar(Nome)
 verificacao(_).
 
 temAs([], false).
-temAs([H|T], true):- H = [N,_,_], N = "As".
-temAs([H|T], R):- temAs(T,R).
+temAs([H|_], true):- H = [N,_,_], N = "As".
+temAs([_|T], R):- temAs(T,R).
 
 diminuiAs(_,[],[]).
 diminuiAs(false,[H|T], Rmao):- H = [N,M,11], diminuiAs(true,T,Rmao1), C = [N,M,1], Rmao = [C|Rmao1].
