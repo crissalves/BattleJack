@@ -33,16 +33,6 @@ escolha("1"):-
     read_line_to_string(user_input,OpcaoJogador),
     modoDeJogo(OpcaoJogador).
 
-modoDeJogo("1"):-
-    jogoVSIA,
-    menuInicial.
-
-
-modoDeJogo("2"):-
-    jogoVSjogador,
-    meunInicial.
-
-
 escolha("2"):- 
     nl,nl,write('\nRegras: \n'),
     nl,write('Existem dois modos, o modo JxIA(Jogador vs IA) e o modo JxJ (jogador vs jogador)'),
@@ -75,6 +65,21 @@ escolha("3"):-
     menuInicial.
 
 escolha("4"):- write('Ate a proxima!'), halt.
-chamadaPrincipal(_):- 
-    opcaoInvalida,
-    main.
+
+escolha(_):- chamadaInvalida.
+
+modoDeJogo("1"):-
+    jogoVSIA,
+    menuInicial.
+
+
+modoDeJogo("2"):-
+    jogoVSjogador,
+    menuInicial.
+
+modoDeJogo(_):- chamadaInvalida.
+
+
+chamadaInvalida:- 
+    write("Opcao invalida, por favor digite um das opcoes abaixo:"),
+    menuInicial.

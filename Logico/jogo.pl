@@ -8,9 +8,9 @@ jogoVSIA:-
 
 jogoVSjogador:-
 	nl,nl,write("Antes de comecar o jogo..."),
-	write("Jogador 1 digite seu nome: "),
+	nl,write("Jogador 1 digite seu nome: "),
 	read_line_to_string(user_input,X),
-	write("Jogador 2 digite seu nome: "),
+	nl,write("Jogador 2 digite seu nome: "),
 	read_line_to_string(user_input,Y),
 	criaJogador(X),nl,
 	criaJogador(Y),
@@ -43,8 +43,8 @@ iniciarRodada(J1,J2):-
 
 	jogador(J1,_,M1,_),
 	jogador(J2,_,M2,_),
-	nl,format(atom(Comeco), "~w e ~w se encaram e estão prontos para o duelo", [J1, J2]), write(Comeco),
-	nl,write("Os dois puxam uma carta para suas mãos"),
+	nl,format(atom(Comeco), "~w e ~w se encaram e estao prontos para o duelo", [J1, J2]), write(Comeco),
+	nl,write("Os dois puxam uma carta para suas maos"),
 	nl,write("O jogo mental acaba de começar."),
 	format(atom(P1), "As cartas de ~w sao:", [J1]),
 	nl,nl,write(P1),
@@ -54,7 +54,7 @@ iniciarRodada(J1,J2):-
 	write(P2),
 	nl,mostrarMao(M2),
 	nl,write("Aperte Enter para continuar:"),
-	read_line_to_string(user_input,X),nl,
+	read_line_to_string(user_input,_),nl,
 	prepararBatalha(J1,J2).
 
 prepararBatalha(J1,J2):-
@@ -65,6 +65,10 @@ prepararBatalha(J1,J2):-
 prepararBatalha(J1,"IA"):-
 	jogador(J1,_,_,true),
 	turnoIA(J1).
+
+prepararBatalha("IA",J2):-
+	jogador("IA",_,_,true),
+	batalha(J2,"IA").
 
 prepararBatalha(J1,J2):-
 	jogador(J1,_,_,true),
@@ -249,7 +253,7 @@ verificacao(Nome):- jogador(Nome,_,M,_), estorouMao(M, true), decidiuParar(Nome)
 verificacao(_).
 
 temAs([], false).
-temAs([H|_], true):- H = [N,_,_], N = "As".
+temAs([H|_], true):- H = [_,_,11].
 temAs([_|T], R):- temAs(T,R).
 
 diminuiAs(_,[],[]).
