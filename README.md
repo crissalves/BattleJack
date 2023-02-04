@@ -7,7 +7,7 @@
 - Cristian Alves da Silva
 - Lucas de Oliveira Carvalho
 
-### Dependecias:
+### Dependecias Haskell:
 
 Para funcionar corretamente, se faz necessário a instalação do:
 ```
@@ -19,3 +19,7 @@ Obs: Por algum motivo, não conseguimos rodar no VScode, então recomendamos usa
 ```
 runhaskell main.hs
 ```
+###Recomendações Prolog:
+
+Para funcionar corretamente apenas recomendamos usar o SWI em utf 8 para a digitação sair de forma correta.
+
